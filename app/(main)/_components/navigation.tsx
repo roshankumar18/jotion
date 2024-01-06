@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { ChevronLeftIcon, MenuIcon, PlugIcon, PlusCircle, PlusIcon, Search, SettingsIcon, Trash } from 'lucide-react'
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import React, { ElementRef, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts';
 import UserItem from './use-item';
@@ -11,18 +11,25 @@ import { toast } from 'sonner';
 import DocumentList from './document-list';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import TrashBox from './trash-box';
+import { useSearchContext } from '@/components/providers/search-provider';
+import { useSettings } from '@/hooks/use-settings';
+import { Navbar } from './navbar';
+
 
 const Navigation = () => {
     const pathname = usePathname()
     const router = useRouter()
     const isMobile = useMediaQuery("(max-width: 768px)")
     const create =   useMutation(api.documents.create)
+    const params = useParams()
 
     const isResizingRef = useRef(false);
     const sidebarRef = useRef<ElementRef<"aside">>(null);
     const navbarRef = useRef<ElementRef<"div">>(null);
     const [isResetting, setIsResetting] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(isMobile);
+    const {isopen,onOpen} = useSearchContext()
+    const setting = useSettings()
 
     useEffect(()=>{
         if(isMobile) {
@@ -103,6 +110,13 @@ const Navigation = () => {
           error: "Failed to create a new note."
         });
       };
+      const onopen = () =>{
+        // event.stopPropagation()
+        console.log("clicked")
+        console.log(isopen)
+        onOpen()
+        console.log(isopen)
+      }
   return (
     <>
     <aside ref={sidebarRef}
@@ -119,12 +133,12 @@ const Navigation = () => {
             label="Search"
             icon={Search}
             isSearch
-            onClick={()=>{}}
+            onClick={onOpen}
           />
         <Item
             label="Settings"
             icon={SettingsIcon}
-            onClick={()=>{}}
+            onClick={setting.onOpen}
           />
           <Item
             label="New Page"
@@ -162,9 +176,14 @@ const Navigation = () => {
     className={cn('absolute top-0 z-[99999] left-60 w-[calc(100%-240px)]',
     isResetting && "transition-all ease-in-out duration-300",
     isMobile && "left-0 w-full")}>
-        <nav className='bg-transparent px-3 py-2 w-full'>
+      {!!params.documentId ?(
+        <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth}/>
+
+      ):
+       ( <nav className='bg-transparent px-3 py-2 w-full'>
             {isCollapsed && <MenuIcon className='h-6 w-6 text-muted-foreground'/>}
-        </nav>
+        </nav>)
+      }
     </div>
     </>
   )
