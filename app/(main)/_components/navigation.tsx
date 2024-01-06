@@ -1,13 +1,20 @@
 import { cn } from '@/lib/utils';
-import { ChevronLeftIcon, MenuIcon } from 'lucide-react'
-import { usePathname } from 'next/navigation';
+import { ChevronLeftIcon, MenuIcon, PlusCircle, Search, SettingsIcon } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation';
 import React, { ElementRef, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts';
 import UserItem from './use-item';
+import Item from './item'
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { toast } from 'sonner';
+import DocumentList from './document-list';
 
 const Navigation = () => {
     const pathname = usePathname()
+    const router = useRouter()
     const isMobile = useMediaQuery("(max-width: 768px)")
+    const create =   useMutation(api.documents.create)
 
     const isResizingRef = useRef(false);
     const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -84,6 +91,16 @@ const Navigation = () => {
           setTimeout(() => setIsResetting(false), 300);
         }
       }
+
+      const handleCreate = () => {
+        const promise = create({ title: "Untitled" })
+          .then((documentId) => router.push(`/documents/${documentId}`))
+        toast.promise(promise, {
+          loading: "Creating a new note...",
+          success: "New note created!",
+          error: "Failed to create a new note."
+        });
+      };
   return (
     <>
     <aside ref={sidebarRef}
@@ -96,12 +113,25 @@ const Navigation = () => {
         <ChevronLeftIcon className='h-6 w-6'/>
     </div>
         <UserItem />
-          {/* <Item
+        <Item
             label="Search"
             icon={Search}
             isSearch
-            onClick={search.onOpen}
-          /> */}
+            onClick={()=>{}}
+          />
+        <Item
+            label="Settings"
+            icon={SettingsIcon}
+            onClick={()=>{}}
+          />
+          <Item
+            label="New Page"
+            icon={PlusCircle}
+            onClick={handleCreate}
+          />
+        <div className='mt-4'>
+            <DocumentList />
+        </div>
         <div 
         onMouseDown={handleMouseDown}
         onClick={resetWidth}

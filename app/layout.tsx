@@ -6,6 +6,7 @@ import {ThemeProvider} from '../components/providers/theme-providers'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
 // const inter = Inter({ subsets: ['latin'] })
 import ConvexClientProvider from '@/components/providers/convex-provider'
+import { Toaster } from 'sonner'
 
 
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='light' enableSystem
         disableTransitionOnChange storageKey='jotion-theme'>
           <ConvexClientProvider>
+            <Toaster position='bottom-center'/>
              {children}
         </ConvexClientProvider>
         </ThemeProvider>
