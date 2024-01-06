@@ -3,7 +3,10 @@ from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import {ThemeProvider} from '../components/providers/theme-providers'
+import { ConvexProviderWithClerk } from 'convex/react-clerk'
 // const inter = Inter({ subsets: ['latin'] })
+import ConvexClientProvider from '@/components/providers/convex-provider'
+
 
 export const metadata: Metadata = {
   title: 'Jotion',
@@ -34,7 +37,9 @@ export default function RootLayout({
       <body>
         <ThemeProvider attribute='class' defaultTheme='light' enableSystem
         disableTransitionOnChange storageKey='jotion-theme'>
-        {children}
+          <ConvexClientProvider>
+             {children}
+        </ConvexClientProvider>
         </ThemeProvider>
       </body>
     </html>
