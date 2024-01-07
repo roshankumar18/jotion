@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/command";
 // import { useSearch } from "@/hooks/use-search";
 import { api } from "@/convex/_generated/api";
-import { useSearchContext } from "../providers/search-provider";
+import { useSearchContext } from "./providers/search-provider";
 
 export const SearchCommand = () => {
   const { user } = useUser();

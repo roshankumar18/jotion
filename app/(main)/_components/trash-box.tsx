@@ -1,7 +1,7 @@
 'use client'
 import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Input } from '@/components/ui/input';
-import { Spinner } from '@/components/ui/spinner';
+import { Spinner } from '@/components/spinner';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import { useMutation, useQuery } from 'convex/react';
